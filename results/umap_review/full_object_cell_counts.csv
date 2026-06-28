@@ -1,0 +1,33 @@
+age,condition,sample,cell_type,n_cells
+P15,Ctrl,15dayS1,AC,234
+P15,Ctrl,15dayS1,BC,655
+P15,Ctrl,15dayS1,Cones,243
+P15,Ctrl,15dayS1,HC,162
+P15,Ctrl,15dayS1,MG,259
+P15,Ctrl,15dayS1,RPE,16
+P15,Ctrl,15dayS1,Rod,4468
+P15,Ctrl,15dayS1,Vasculature cells,41
+P15,KO,15dayS2,AC,176
+P15,KO,15dayS2,BC,598
+P15,KO,15dayS2,Cones,176
+P15,KO,15dayS2,HC,153
+P15,KO,15dayS2,MG,234
+P15,KO,15dayS2,RPE,15
+P15,KO,15dayS2,Rod,3385
+P15,KO,15dayS2,Vasculature cells,35
+P35,Ctrl,30dayS1,AC,377
+P35,Ctrl,30dayS1,BC,749
+P35,Ctrl,30dayS1,Cones,244
+P35,Ctrl,30dayS1,HC,110
+P35,Ctrl,30dayS1,MG,331
+P35,Ctrl,30dayS1,RPE,24
+P35,Ctrl,30dayS1,Rod,6320
+P35,Ctrl,30dayS1,Vasculature cells,24
+P35,KO,30dayS2,AC,351
+P35,KO,30dayS2,BC,789
+P35,KO,30dayS2,Cones,211
+P35,KO,30dayS2,HC,63
+P35,KO,30dayS2,MG,341
+P35,KO,30dayS2,RPE,27
+P35,KO,30dayS2,Rod,6246
+P35,KO,30dayS2,Vasculature cells,38

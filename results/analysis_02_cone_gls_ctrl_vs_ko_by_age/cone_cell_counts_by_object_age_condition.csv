@@ -1,0 +1,9 @@
+object,age,condition,sample_original,n_cells
+all_initial_cones,P15,Ctrl,15dayS1,243
+all_initial_cones,P15,KO,15dayS2,176
+all_initial_cones,P35,Ctrl,30dayS1,244
+all_initial_cones,P35,KO,30dayS2,211
+reclustered_cones,P15,Ctrl,15dayS1,243
+reclustered_cones,P15,KO,15dayS2,169
+reclustered_cones,P35,Ctrl,30dayS1,233
+reclustered_cones,P35,KO,30dayS2,204

@@ -1,0 +1,28 @@
+name: gls-cone-ko-r
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - r-base=4.4
+  - r-essentials
+  - r-seurat
+  - r-seuratobject
+  - r-signac
+  - r-future
+  - r-ggplot2
+  - r-patchwork
+  - r-matrix
+  - r-dplyr
+  - r-tidyr
+  - r-tibble
+  - r-scales
+  - r-rcolorbrewer
+  - r-viridis
+  - r-gplots
+  - r-heatmaply
+  - r-hdf5r
+  - r-remotes
+  - bioconductor-genomeinfodb
+  - bioconductor-ensdb.mmusculus.v79
+  - bioconductor-bsgenome.mmusculus.ucsc.mm10
+  - snakemake-minimal

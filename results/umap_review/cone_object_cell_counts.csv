@@ -1,0 +1,5 @@
+age,condition,sample,n_cells
+P15,Ctrl,15dayS1,243
+P15,KO,15dayS2,169
+P35,Ctrl,30dayS1,233
+P35,KO,30dayS2,204

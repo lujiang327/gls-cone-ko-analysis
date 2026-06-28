@@ -1,0 +1,5 @@
+item,value
+raw_count_input,scRNA_4_thomas/scanpy/photoreceptors.h5ad
+annotation_umap_input,scRNA_4_thomas/scanpy/annotated_photoreceptors.h5ad
+normalization,log1p(raw_count / cell_total_counts * 10000)
+sample_mapping,15dayS1=P15 Ctrl; 15dayS2=P15 KO; 35dayS1=P35 Ctrl; 35dayS2=P35 KO

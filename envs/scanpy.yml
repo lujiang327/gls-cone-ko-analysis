@@ -1,0 +1,19 @@
+name: gls-cone-ko-scanpy
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - python=3.10
+  - scanpy
+  - anndata
+  - pandas
+  - numpy
+  - scipy
+  - h5py
+  - matplotlib
+  - seaborn
+  - leidenalg
+  - python-igraph
+  - harmonypy
+  - importlib-metadata
+  - snakemake-minimal

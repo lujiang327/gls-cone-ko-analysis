@@ -1,0 +1,8 @@
+.micromamba/
+tools/micromamba/
+scRNA_4_thomas/
+.matplotlib-cache/
+.DS_Store
+*.Rhistory
+*.RData
+*.Rproj.user/

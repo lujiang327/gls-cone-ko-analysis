@@ -1,0 +1,17 @@
+object,gene,age,condition,sample_original,n_cells,pct_detected,avg_lognorm_expr,median_lognorm_expr
+all_initial_cones,Gls,P15,Ctrl,15dayS1,243,93.00411522633745,1.4309317366487067,1.4958667734951663
+all_initial_cones,Gls,P15,KO,15dayS2,176,39.77272727272727,0.3180564909336188,0
+all_initial_cones,Gls,P35,Ctrl,30dayS1,244,93.44262295081968,1.7405393157890372,1.8308644205606845
+all_initial_cones,Gls,P35,KO,30dayS2,211,21.32701421800948,0.20067041177411254,0
+all_initial_cones,Gls2,P15,Ctrl,15dayS1,243,0,0,0
+all_initial_cones,Gls2,P15,KO,15dayS2,176,0,0,0
+all_initial_cones,Gls2,P35,Ctrl,30dayS1,244,0,0,0
+all_initial_cones,Gls2,P35,KO,30dayS2,211,0.9478672985781991,0.006525023926141812,0
+reclustered_cones,Gls,P15,Ctrl,15dayS1,243,93.00411522633745,1.4309317366487067,1.4958667734951663
+reclustered_cones,Gls,P15,KO,15dayS2,169,37.8698224852071,0.28405128309882843,0
+reclustered_cones,Gls,P35,Ctrl,30dayS1,233,93.99141630901288,1.7646195698225804,1.846575613955916
+reclustered_cones,Gls,P35,KO,30dayS2,204,18.627450980392158,0.15197538479134387,0
+reclustered_cones,Gls2,P15,Ctrl,15dayS1,243,0,0,0
+reclustered_cones,Gls2,P15,KO,15dayS2,169,0,0,0
+reclustered_cones,Gls2,P35,Ctrl,30dayS1,233,0,0,0
+reclustered_cones,Gls2,P35,KO,30dayS2,204,0.9803921568627451,0.006748921805960411,0
