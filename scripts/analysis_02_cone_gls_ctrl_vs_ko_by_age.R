@@ -18,6 +18,7 @@ dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
 primary_rds <- file.path(project_dir, "scRNA_4_thomas", "photoreceptors_reClusteredCones.rds")
 sensitivity_rds <- file.path(project_dir, "scRNA_4_thomas", "photoreceptors_SubsetCones.rds")
 genes <- c("Gls", "Gls2")
+condition_colors <- c("Ctrl" = "#2C7BB6", "KO" = "#D7191C")
 
 sample_info <- tibble(
   sample = c("15dayS1", "15dayS2", "30dayS1", "30dayS2"),
@@ -96,6 +97,14 @@ age_wilcox <- function(expr_long) {
     group_by(object, gene) %>%
     mutate(p_adj_bh = p.adjust(p_value, method = "BH")) %>%
     ungroup()
+}
+
+format_p <- function(x) {
+  ifelse(
+    is.na(x),
+    "NA",
+    ifelse(x < 0.001, formatC(x, format = "e", digits = 2), sprintf("%.3f", x))
+  )
 }
 
 message("Loading primary cone object: ", primary_rds)
@@ -203,5 +212,92 @@ sample_umap <- DimPlot(
 
 ggsave(file.path(out_dir, "cone_umap_age_condition.pdf"), sample_umap, width = 8, height = 6)
 ggsave(file.path(out_dir, "cone_umap_age_condition.png"), sample_umap, width = 8, height = 6, dpi = 300)
+
+primary_stats <- stats %>%
+  filter(object == "reclustered_cones") %>%
+  mutate(
+    age = factor(age, levels = c("P15", "P35")),
+    stat_label = paste0("p=", format_p(p_value), "\nFDR=", format_p(p_adj_bh))
+  )
+
+for (gene_i in genes) {
+  gene_expr <- primary_expr %>%
+    filter(gene == gene_i) %>%
+    mutate(
+      age = factor(age, levels = c("P15", "P35")),
+      condition = factor(condition, levels = c("Ctrl", "KO"))
+    )
+  gene_stats <- primary_stats %>% filter(gene == gene_i)
+  y_max <- gene_expr %>%
+    group_by(age) %>%
+    summarise(y = max(lognorm_expr, na.rm = TRUE) * 1.08 + 0.05, .groups = "drop")
+  gene_stats <- gene_stats %>% left_join(y_max, by = "age")
+
+  gene_violin <- ggplot(gene_expr, aes(x = condition, y = lognorm_expr, fill = condition)) +
+    geom_violin(scale = "width", trim = TRUE, linewidth = 0.25, alpha = 0.75) +
+    geom_boxplot(width = 0.14, outlier.size = 0.25, alpha = 0.85) +
+    geom_text(
+      data = gene_stats,
+      aes(x = 1.5, y = y, label = stat_label),
+      inherit.aes = FALSE,
+      size = 5.2,
+      lineheight = 0.95
+    ) +
+    facet_wrap(~ age, nrow = 1, scales = "free_y") +
+    scale_fill_manual(values = condition_colors) +
+    labs(
+      x = NULL,
+      y = "Log-normalized expression",
+      title = paste0("Cones: ", gene_i, " expression is compared between Ctrl and KO"),
+      subtitle = "Primary object: reclustered cones; p values are exploratory cell-level Wilcoxon tests"
+    ) +
+    theme_classic(base_size = 18) +
+    theme(
+      legend.position = "none",
+      plot.title = element_text(face = "bold")
+    )
+
+  ggsave(
+    file.path(out_dir, paste0("moloy_review_cones_", tolower(gene_i), "_violin_ctrl_vs_ko_by_age_with_stats.pdf")),
+    gene_violin,
+    width = 10,
+    height = 5.8
+  )
+  ggsave(
+    file.path(out_dir, paste0("moloy_review_cones_", tolower(gene_i), "_violin_ctrl_vs_ko_by_age_with_stats.png")),
+    gene_violin,
+    width = 10,
+    height = 5.8,
+    dpi = 300
+  )
+}
+
+count_labels <- cell_counts %>%
+  filter(object == "reclustered_cones") %>%
+  mutate(
+    age = factor(age, levels = c("P15", "P35")),
+    condition = factor(condition, levels = c("Ctrl", "KO")),
+    label = paste0("n=", n_cells)
+  )
+
+count_plot <- ggplot(count_labels, aes(x = condition, y = n_cells, fill = condition)) +
+  geom_col(width = 0.65, alpha = 0.85) +
+  geom_text(aes(label = label), vjust = -0.35, size = 6) +
+  facet_wrap(~ age, nrow = 1) +
+  scale_fill_manual(values = condition_colors) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.16))) +
+  labs(
+    x = NULL,
+    y = "Number of reclustered cone cells",
+    title = "Recovered cone cells used for cone-only analysis"
+  ) +
+  theme_classic(base_size = 18) +
+  theme(
+    legend.position = "none",
+    plot.title = element_text(face = "bold")
+  )
+
+ggsave(file.path(out_dir, "moloy_review_cone_cell_counts_ctrl_vs_ko_by_age.pdf"), count_plot, width = 9.5, height = 5.2)
+ggsave(file.path(out_dir, "moloy_review_cone_cell_counts_ctrl_vs_ko_by_age.png"), count_plot, width = 9.5, height = 5.2, dpi = 300)
 
 message("Done. Outputs written to: ", out_dir)

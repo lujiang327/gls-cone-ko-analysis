@@ -46,10 +46,8 @@ if (length(genes_missing) > 0) {
 }
 
 wt <- subset(obj, subset = sample %in% ctrl_samples)
-wt$cell_type <- factor(
-  wt$cell_type,
-  levels = c("Cones", "Rod", "MG", "AC", "BC", "HC", "RPE", "Vasculature cells")
-)
+cell_type_order <- c("Cones", "Rod", "MG", "AC", "BC", "HC", "RPE", "Vasculature cells")
+wt$cell_type <- factor(wt$cell_type, levels = cell_type_order)
 
 cell_counts <- wt@meta.data %>%
   count(age, sample, cell_type, name = "n_cells") %>%
@@ -131,6 +129,14 @@ wilcox_results <- lapply(genes_present, function(gene_i) {
 
 write_csv(wilcox_results, file.path(out_dir, "wt_gls_gls2_cones_vs_other_cell_types_wilcox_exploratory.csv"))
 
+format_p <- function(x) {
+  ifelse(
+    is.na(x),
+    "NA",
+    ifelse(x < 0.001, formatC(x, format = "e", digits = 2), sprintf("%.3f", x))
+  )
+}
+
 dot_df <- summary_by_cell_type %>%
   mutate(cell_type = factor(cell_type, levels = levels(wt$cell_type)))
 
@@ -173,5 +179,71 @@ violin_plot <- ggplot(expr_long, aes(x = cell_type, y = lognorm_expr, fill = cel
 
 ggsave(file.path(out_dir, "wt_gls_gls2_violin_by_cell_type.pdf"), violin_plot, width = 8.5, height = 7)
 ggsave(file.path(out_dir, "wt_gls_gls2_violin_by_cell_type.png"), violin_plot, width = 8.5, height = 7, dpi = 300)
+
+for (gene_i in genes_present) {
+  gene_summary <- summary_by_age_cell_type %>%
+    filter(gene == gene_i) %>%
+    mutate(cell_type = factor(cell_type, levels = rev(cell_type_order)))
+
+  gene_plot <- ggplot(gene_summary, aes(x = age, y = cell_type)) +
+    geom_point(
+      aes(size = pct_detected, color = avg_lognorm_expr),
+      stroke = 0.35
+    ) +
+    scale_color_viridis_c(option = "magma", name = "Avg log-normalized\nexpression") +
+    scale_size_continuous(name = "% cells detected", range = c(3, 12), limits = c(0, 100)) +
+    labs(
+      x = NULL,
+      y = NULL,
+      title = paste0("WT/Ctrl ", gene_i, " expression by retinal cell type"),
+      subtitle = "Cones are shown at the top; dot size is detection rate"
+    ) +
+    theme_classic(base_size = 18) +
+    theme(
+      plot.title = element_text(face = "bold"),
+      legend.title = element_text(size = 14),
+      legend.text = element_text(size = 13)
+    )
+
+  ggsave(
+    file.path(out_dir, paste0("moloy_review_wt_", tolower(gene_i), "_dotplot_by_age_cell_type.pdf")),
+    gene_plot,
+    width = 8.5,
+    height = 6.2
+  )
+  ggsave(
+    file.path(out_dir, paste0("moloy_review_wt_", tolower(gene_i), "_dotplot_by_age_cell_type.png")),
+    gene_plot,
+    width = 8.5,
+    height = 6.2,
+    dpi = 300
+  )
+}
+
+gls_cone_stats <- wilcox_results %>%
+  filter(gene == "Gls") %>%
+  mutate(
+    other_cell_type = factor(other_cell_type, levels = rev(setdiff(cell_type_order, "Cones"))),
+    fdr_label = paste0("FDR=", format_p(p_adj_bh))
+  )
+
+if (nrow(gls_cone_stats) > 0) {
+  gls_stats_plot <- ggplot(gls_cone_stats, aes(x = mean_difference, y = other_cell_type)) +
+    geom_vline(xintercept = 0, color = "grey60", linewidth = 0.5) +
+    geom_col(fill = "#2C7BB6", width = 0.65) +
+    geom_text(aes(label = fdr_label), hjust = -0.05, size = 5) +
+    labs(
+      x = "Mean log-normalized expression difference (Cones - other cell type)",
+      y = NULL,
+      title = "WT/Ctrl Gls: cones compared with other retinal cell types",
+      subtitle = "Exploratory Wilcoxon tests; labels show BH FDR"
+    ) +
+    coord_cartesian(clip = "off") +
+    theme_classic(base_size = 18) +
+    theme(plot.margin = margin(5.5, 85, 5.5, 5.5))
+
+  ggsave(file.path(out_dir, "moloy_review_wt_gls_cones_vs_other_fdr_barplot.pdf"), gls_stats_plot, width = 10, height = 5.8)
+  ggsave(file.path(out_dir, "moloy_review_wt_gls_cones_vs_other_fdr_barplot.png"), gls_stats_plot, width = 10, height = 5.8, dpi = 300)
+}
 
 message("Done. Outputs written to: ", out_dir)
