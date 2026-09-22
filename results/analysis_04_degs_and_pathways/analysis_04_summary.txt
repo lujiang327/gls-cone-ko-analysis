@@ -1,0 +1,19 @@
+Analysis 04: DEGs and pathway enrichment
+
+Design:
+- Main input: Scanpy raw-count object photoreceptors.h5ad plus annotations from annotated_photoreceptors.h5ad.
+- Comparisons: KO vs Ctrl within each age and cell type.
+- Sample mapping: 15dayS1=P15 Ctrl, 15dayS2=P15 KO, 35dayS1=P35 Ctrl, 35dayS2=P35 KO.
+
+Important caveat:
+- Each age/condition has one sample, so these are exploratory cell-level Wilcoxon DE results, not replicate-aware sample-level DE tests.
+
+DEG threshold: FDR < 0.05 and absolute log2FC >= 0.25.
+Gene filter before DE: detected in at least 10% of cells in Ctrl or KO.
+
+Top non-cone DEG burdens:
+- P15: Rod=645; AC=354; BC=325; MG=105; Endothelial=0
+- P35: BC=666; Rod=228; MG=88; AC=5; Endothelial=0
+
+Pathway status:
+- all all: skipped_online_enrichr_not_authorized (not run)

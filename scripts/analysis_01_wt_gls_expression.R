@@ -190,7 +190,7 @@ for (gene_i in genes_present) {
       aes(size = pct_detected, color = avg_lognorm_expr),
       stroke = 0.35
     ) +
-    scale_color_viridis_c(option = "magma", name = "Avg log-normalized\nexpression") +
+    scale_color_viridis_c(option = "viridis", name = "Avg log-normalized\nexpression") +
     scale_size_continuous(name = "% cells detected", range = c(3, 12), limits = c(0, 100)) +
     labs(
       x = NULL,

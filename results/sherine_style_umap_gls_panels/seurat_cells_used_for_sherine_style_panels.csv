@@ -1,0 +1,33 @@
+"age","condition","celltype","n_cells"
+"P15","cKO","Rod",3385
+"P35","cKO","Rod",6246
+"P15","WT","Rod",4468
+"P35","WT","Rod",6320
+"P15","cKO","BC",598
+"P35","cKO","BC",789
+"P15","WT","BC",655
+"P35","WT","BC",749
+"P15","cKO","Cones",176
+"P35","cKO","Cones",211
+"P15","WT","Cones",243
+"P35","WT","Cones",244
+"P15","cKO","AC",176
+"P35","cKO","AC",351
+"P15","WT","AC",234
+"P35","WT","AC",377
+"P15","cKO","MG",234
+"P35","cKO","MG",341
+"P15","WT","MG",259
+"P35","WT","MG",331
+"P15","cKO","HC",153
+"P35","cKO","HC",63
+"P15","WT","HC",162
+"P35","WT","HC",110
+"P15","cKO","Vasculature cells",35
+"P35","cKO","Vasculature cells",38
+"P15","WT","Vasculature cells",41
+"P35","WT","Vasculature cells",24
+"P15","cKO","RPE",15
+"P35","cKO","RPE",27
+"P15","WT","RPE",16
+"P35","WT","RPE",24

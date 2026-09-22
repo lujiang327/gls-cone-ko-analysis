@@ -248,8 +248,8 @@ for (gene_i in genes) {
     labs(
       x = NULL,
       y = "Log-normalized expression",
-      title = paste0("Cones: ", gene_i, " expression is compared between Ctrl and KO"),
-      subtitle = "Primary object: reclustered cones; p values are exploratory cell-level Wilcoxon tests"
+      title = paste0("Cones: ", gene_i, " Ctrl vs KO by age"),
+      subtitle = "Primary reclustered cone object; exploratory cell-level Wilcoxon tests"
     ) +
     theme_classic(base_size = 18) +
     theme(

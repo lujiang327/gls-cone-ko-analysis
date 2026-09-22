@@ -294,15 +294,6 @@ def dot_plot(summary):
             edgecolor="black",
             linewidth=0.3,
         )
-        cone_sub = sub[sub["celltype"].astype(str) == "Cones"]
-        ax.scatter(
-            cone_sub["age_condition"].astype(str).map(x_map),
-            cone_sub["celltype"].astype(str).map(y_map),
-            s=np.clip(cone_sub["pct_detected"], 0, 100) * 3 + 55,
-            facecolors="none",
-            edgecolors="#FFD700",
-            linewidth=2.6,
-        )
         ax.set_title(gene)
         ax.set_xticks(range(len(AGE_CONDITION_ORDER)))
         ax.set_xticklabels(AGE_CONDITION_ORDER, rotation=45, ha="right")
@@ -344,15 +335,6 @@ def gene_dot_plot(summary, gene):
         edgecolor="black",
         linewidth=0.4,
     )
-    cone_sub = sub[sub["celltype"].astype(str) == "Cones"]
-    ax.scatter(
-        cone_sub["age_condition"].astype(str).map(x_map),
-        cone_sub["celltype"].astype(str).map(y_map),
-        s=np.clip(cone_sub["pct_detected"], 0, 100) * 4 + 80,
-        facecolors="none",
-        edgecolors="#FFD700",
-        linewidth=3,
-    )
     ax.set_xticks(range(len(AGE_CONDITION_ORDER)))
     ax.set_xticklabels(AGE_CONDITION_ORDER, rotation=45, ha="right")
     ax.set_yticks(range(len(y_order)))
@@ -377,10 +359,11 @@ def gene_heatmap(summary, gene):
     y_order = [ct for ct in CELLTYPE_ORDER if ct in avg.index]
     avg = avg.reindex(index=y_order, columns=AGE_CONDITION_ORDER)
     pct = pct.reindex(index=y_order, columns=AGE_CONDITION_ORDER)
-    labels = pct.map(lambda x: "" if pd.isna(x) else f"{x:.0f}%")
+    labels = pct.map(lambda x: "ND" if pd.isna(x) or x == 0 else f"{x:.0f}%")
+    avg_plot = avg.fillna(0)
     fig, ax = plt.subplots(figsize=(8, 6.5))
     sns.heatmap(
-        avg,
+        avg_plot,
         annot=labels,
         fmt="",
         cmap="viridis",
@@ -390,7 +373,6 @@ def gene_heatmap(summary, gene):
         annot_kws={"fontsize": 15, "fontweight": "bold"},
         ax=ax,
     )
-    ax.add_patch(plt.Rectangle((0, 0), len(AGE_CONDITION_ORDER), 1, fill=False, edgecolor="#FFD700", linewidth=4))
     ax.set_xlabel("")
     ax.set_ylabel("")
     ax.set_title(f"{gene} expression; labels show % detected")
@@ -418,8 +400,8 @@ def effect_plot(stats_df, gene):
             age_sub["celltype"].astype(str).map(y_map),
             age_sub["difference_ko_minus_ctrl"],
             color=colors,
-            edgecolor=["#FFD700" if ct == "Cones" else "white" for ct in age_sub["celltype"].astype(str)],
-            linewidth=[3 if ct == "Cones" else 0.5 for ct in age_sub["celltype"].astype(str)],
+            edgecolor="white",
+            linewidth=0.5,
             height=0.7,
         )
         for _, row in age_sub.iterrows():
